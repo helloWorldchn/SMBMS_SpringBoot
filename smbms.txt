@@ -1,0 +1,3 @@
+项目名称：SMBMS 超市订单管理系统（SuperMarket Bill Management System）
+开发环境：JDK1.8.0_144、Intellij IDEA 2020.1.2、Navicat Premium 12.1.7
+软件架构：MyBatis 3.5.2 + Spring Boot + SpringMVC + MySQL 5.7.24

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ProviderMapper">
+
+    <!--查询用户总数，以实现供应商列表分页功能-->
+    <select id="getProviderCount" resultType="Integer">
+        select count(1) as count from smbms_provider where 1=1
+        <if test="proName != null">
+            and proName like concat('%',#{proName},'%')
+        </if>
+        <if test="proCode != null">
+            and proCode like concat('%',#{proCode},'%')
+        </if>
+    </select>
+    <!--通过供应商名称、编码获取供应商列表-模糊查询-providerList-->
+    <select id="getProviderList" resultType="Provider">
+        select * from smbms_provider where 1=1
+        <if test="proName != null">
+            and proName like concat('%',#{proName},'%')
+        </if>
+        <if test="proCode != null">
+            and proCode like concat('%',#{proCode},'%')
+        </if>
+         order by creationDate DESC
+    </select>
+
+    <!--增加供应商 供应商管理模块中的子模块：添加供应商-->
+    <insert id="add" parameterType="Provider">
+        insert into smbms_provider (proCode,proName,proDesc,proContact,proPhone,proAddress,proFax,createdBy,creationDate)
+        values(#{proCode},#{proName},#{proDesc},#{proContact},#{proPhone},#{proAddress},#{proFax},#{createdBy},#{creationDate})
+    </insert>
+
+    <!--通过proId删除Provider-->
+    <delete id="deleteProviderById">
+        delete from smbms_provider where id = #{delId}
+    </delete>
+
+    <!--通过proId获取Provider-->
+    <select id="getProviderById" resultType="Provider">
+        select * from smbms_provider where id = #{id}
+    </select>
+
+    <!--修改用户信息-->
+    <update id="modify" parameterType="Provider">
+        update smbms_provider set proName=#{proName},proDesc=#{proDesc},proContact=#{proContact},proPhone=#{proPhone},
+        proAddress=#{proAddress},proFax=#{proFax},modifyBy=#{modifyBy},modifyDate=#{modifyDate} where id = #{id}
+    </update>
+
+</mapper>

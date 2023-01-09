@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+
+</head>
+<body th:fragment="rollpagebar(totalCount,currentPageNo,totalPageCount)">
+ 		<div class="page-bar">
+			<ul class="page-num-ul clearfix">
+				<li th:text="'共'+${totalCount }+'条记录&nbsp;&nbsp;'+${currentPageNo }+'/'+${totalPageCount }+页"></li>
+				<span th:if="${currentPageNo > 1}">
+					<a th:href="'javascript:page_nav(document.forms[0],1);'">首页</a>
+					<a th:href="'javascript:page_nav(document.forms[0],'+${currentPageNo - 1}+');'">上一页</a>
+				</span>
+				<span th:if="${currentPageNo < totalPageCount }">
+					<a th:href="'javascript:page_nav(document.forms[0],'+${currentPageNo+1 }+');'">下一页</a>
+					<a th:href="'javascript:page_nav(document.forms[0],'+${totalPageCount }+');'">最后一页</a>
+				</span>
+				&nbsp;&nbsp;
+			</ul>
+		 <span class="page-go-form"><label>跳转至</label>
+	     <input type="text" name="inputPage" id="inputPage" class="page-key" />页
+	     <button type="button" class="page-btn" onClick='jump_to(document.forms[0],document.getElementById("inputPage").value)'>GO</button>
+		</span>
+		</div>
+		<script type="text/javascript" th:src="@{/js/rollpage.js}"></script>
+</body>
+</html>

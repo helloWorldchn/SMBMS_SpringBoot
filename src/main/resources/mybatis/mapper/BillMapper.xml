@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.BillMapper">
+
+    <!--根据商品名称、供应商id、是否付款查询订单总数，以实现订单列表分页功能-->
+    <select id="getBillCount" resultType="Integer">
+        select count(1) as count from smbms_bill b, smbms_provider p where b.providerId = p.id
+        <if test="productName != null">
+            and productName like concat('%',#{productName},'%')
+        </if>
+        <if test="providerId > 0">
+            and providerId = #{providerId}
+        </if>
+        <if test="isPayment > 0">
+            and isPayment = #{isPayment}
+        </if>
+    </select>
+    <!--通过商品名称、供应商id、是否付款查询订单列表-模糊查询-billList-->
+    <select id="getBillList" resultType="Bill">
+        select b.*,p.proName as providerName from smbms_bill b, smbms_provider p where b.providerId = p.id
+        <if test="productName != null">
+            and productName like concat('%',#{productName},'%')
+        </if>
+        <if test="providerId > 0">
+            and providerId = #{providerId}
+        </if>
+        <if test="isPayment > 0">
+            and isPayment = #{isPayment}
+        </if>
+        order by b.creationDate DESC
+    </select>
+
+    <!--增加订单 订单管理模块中的子模块：添加订单-->
+    <insert id="add" parameterType="Bill">
+        insert into smbms_bill (billCode,productName,productDesc,productUnit,productCount,totalPrice,isPayment,providerId,createdBy,creationDate)
+        values (#{billCode},#{productName},#{productDesc},#{productUnit},#{productCount},#{totalPrice},#{isPayment},#{providerId},#{createdBy},#{creationDate})
+    </insert>
+
+    <!--通过delId删除Bill-->
+    <delete id="deleteBillById">
+        delete from smbms_bill where id = #{delId}
+    </delete>
+
+    <!--通过billId获取Bill-->
+    <select id="getBillById" resultType="Bill">
+        select b.*,p.proName as providerName from smbms_bill b, smbms_provider p where b.providerId = p.id and b.id=#{id}
+    </select>
+
+    <!--修改订单信息-->
+    <update id="modify" parameterType="Bill">
+        update smbms_bill set productName= #{productName},productDesc=#{productDesc},productUnit=#{productUnit},
+                              productCount=#{productCount},totalPrice=#{totalPrice},isPayment=#{isPayment},
+                              providerId=#{providerId},modifyBy=#{modifyBy},modifyDate=#{modifyDate} where id = #{id}
+    </update>
+
+</mapper>

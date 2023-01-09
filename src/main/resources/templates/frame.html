@@ -1,0 +1,15 @@
+﻿<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<span th:replace="~{common/head.html::headbar}"></span>
+
+<div class="right">
+    <img class="wColck" th:src="@{/images/clock.jpg}" alt=""/>
+    <div class="wFont">
+        <h2 th:text="${session.userSession.userName}"></h2>
+        <p th:utext="'欢迎来到超市订单管理系统!'"></p>
+    </div>
+</div>
+</section>
+<span th:replace="~{common/foot.html::footbar}"></span>
+
+</html>

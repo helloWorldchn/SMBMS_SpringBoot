@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserMapper">
+
+    <!--得到要登录的用户-->
+    <select id="getLoginUser" parameterType="String" resultType="User">
+        select * from smbms_user where userCode= #{userCode};
+    </select>
+
+    <!--修改当前用户密码-->
+    <update id="updatePwd" parameterType="Map">
+        update smbms_user set userPassword = #{password} where id = #{id};
+    </update>
+
+    <!--根据用户名或者角色查询用户总数-->
+    <select id="getUserCount" resultType="Integer">
+        select count(1) as count from smbms_user u,smbms_role r where u.userRole = r.id
+        <if test="username != null">
+            and u.userName like concat('%',#{username},'%')
+        </if>
+        <if test="userRole > 0">
+            and u.userRole = #{userRole}
+        </if>
+    </select>
+    <!--获取用户列表  通过条件查询userList-->
+    <select id="getUserList" resultType="User">
+        select u.*,r.roleName as userRoleName from smbms_user u,smbms_role r where u.userRole = r.id
+        <if test="queryUserName != null and !queryUserName.equals('')">
+            and u.userName like concat('%',#{queryUserName},'%')
+        </if>
+        <if test="queryUserRole > 0">
+            and u.userRole = #{queryUserRole}
+        </if>
+        order by u.creationDate DESC limit #{currentPageNo},#{pageSize}
+    </select>
+
+    <!--增加用户信息-->
+    <insert id="add" parameterType="User">
+        insert into smbms_user (userCode,userName,userPassword,userRole,gender,birthday,phone,address,creationDate,createdBy)
+        values(#{userCode},#{userName},#{userPassword},#{userRole},#{gender},#{birthday},#{phone},#{address},#{creationDate},#{createdBy})
+    </insert>
+
+    <!--根据userId删除user-->
+    <delete id="deleteUserById">
+        delete from smbms_user where id = #{delId}
+    </delete>
+
+    <!--根据id获取user信息-->
+    <select id="getUserById" resultType="User">
+        select u.*,DATE_FORMAT(birthday,'%Y-%m-%d') AS 'birthday',r.roleName as userRoleName from smbms_user u,smbms_role r where u.id= #{id} and u.userRole = r.id
+    </select>
+
+    <!--修改用户信息-->
+    <update id="modify" parameterType="User">
+         update smbms_user set userName=#{userName},gender=#{gender},birthday=#{birthday},phone=#{phone},address=#{address},userRole=#{userRole},modifyBy=#{modifyBy},modifyDate=#{modifyDate} where id = #{id}
+    </update>
+
+</mapper>
