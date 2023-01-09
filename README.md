@@ -1,0 +1,2 @@
+# SMBMS_SpringBoot
+SMBMS超市订单管理系统的SpringBoot升级版。SpringBoot+Thymeleaf+MyBatis实现。bilibili狂神说的项目。
